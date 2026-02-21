@@ -1,46 +1,37 @@
-CREATE DATABASE centro_educativo;
 USE centro_educativo;
 
-CREATE TABLE profesores (
-    nombrePro VARCHAR(10) UNIQUE,
-    apellido1Pro VARCHAR(15),
-    apellido2Pro VARCHAR(15),
-    nifPro VARCHAR(9),
-    direPro VARCHAR(30),
-    tituloPro VARCHAR(30),
-    salario DECIMAL(6,2) NOT NULL,
-    CONSTRAINT PK_nifPro PRIMARY KEY (nifPro)
-);
+ALTER TABLE alumnos
+ADD edad INT;
 
-CREATE TABLE cursos (
-    nombreCur VARCHAR(10) UNIQUE,
-    codigoCur NUMERIC(5) PRIMARY KEY,
-    nifProfe VARCHAR(9),
-    maxAlu NUMERIC(3),
-    fechaIni DATE,
-    fechaFin DATE,
-    numHoTo NUMERIC(3) NOT NULL,
-    CONSTRAINT FK_cursos_profesores
-        FOREIGN KEY (nifProfe)
-        REFERENCES profesores (nifPro)
-        ON DELETE CASCADE,
-    CONSTRAINT CK_curso_fecha
-        CHECK (fechaFin > fechaIni)
-);
+ALTER TABLE alumnos
+ADD CONSTRAINT CK_alumnos_edad
+CHECK (edad BETWEEN 14 AND 65);
 
-CREATE TABLE alumnos (
-    nombreAlu VARCHAR(10),
-    apellido1Alu VARCHAR(15),
-    apellido2Alu VARCHAR(15),
-    nifAlu VARCHAR(9) PRIMARY KEY,
-    direccionAlu VARCHAR(30),
-    sexoAlu VARCHAR(1),
-    fechaNacAlu DATE,
-    cursoAlu NUMERIC(5),
-    CONSTRAINT FK_cursoAlu_cursos
-        FOREIGN KEY (cursoAlu)
-        REFERENCES cursos (codigoCur)
-        ON DELETE CASCADE,
-    CONSTRAINT alu_sex_CK
-        CHECK (sexoAlu IN ('H','M'))
-);
+ALTER TABLE cursos
+ADD CONSTRAINT CK_cursos_numHoTo
+CHECK (numHoTo IN (30, 40, 60));
+
+ALTER TABLE cursos
+ADD CONSTRAINT CK_cursos_maxAlu
+CHECK (maxAlu >= 15);
+
+ALTER TABLE alumnos
+DROP CONSTRAINT alu_sex_CK;
+
+ALTER TABLE cursos
+DROP FOREIGN KEY FK_cursos_profesores;
+
+ALTER TABLE profesores
+DROP COLUMN direPro;
+
+ALTER TABLE profesores
+DROP PRIMARY KEY;
+
+ALTER TABLE profesores
+ADD CONSTRAINT PK_profesores_nombre_apellidos
+PRIMARY KEY (nombrePro, apellido1Pro, apellido2Pro);
+
+ALTER TABLE profesores
+RENAME TO tutores;
+
+DROP TABLE alumnos;
