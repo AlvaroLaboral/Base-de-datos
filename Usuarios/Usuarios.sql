@@ -62,8 +62,8 @@ GRANT permiso ON nombre_base_de_datos.nombre_tabla TO nombre_rol;
  GRANT nombre_rol TO nombre_usuario;
  
  -- vamos a crear tres roles: rol_lectura_escritura, rol_lectura y rol_escritura
- -- DROP ROLE IF EXISTS 'rol_lectura_escritura', 'rol_lectura', 'rol_escritura';
--- CREATE ROLE 'rol_lectura_escritura', 'rol_lectura', 'rol_escritura';
+DROP ROLE IF EXISTS 'rol_lectura_escritura', 'rol_lectura', 'rol_escritura';
+CREATE ROLE 'rol_lectura_escritura', 'rol_lectura', 'rol_escritura';
 
 -- vamos a asignar los privilegios que tendrá cada rol y sobre qué base datos tendrá estos privilegios.
 GRANT ALL ON base_de_datos.* TO 'rol_lectura_escritura';
